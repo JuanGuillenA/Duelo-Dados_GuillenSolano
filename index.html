@@ -10,7 +10,7 @@
   <title>Duelo de Dados 3D</title>
   <!-- Titulo que s emuestra en el navegador -->
   <link rel="stylesheet" href="style.css">
-  <!-- VLinea para vincular el documento de los estilos-->
+  <!-- Linea para vincular el documento de los estilos-->
 </head>
 <body>
 
@@ -28,103 +28,15 @@
     <input type="color" id="colorDado" value="#ffffff">
     <!-- Botón para iniciar el juego -->
     <button id="btn-iniciar">Iniciar Juego</button>
+    <h2>Reglas del Juego</h2>
+    <ol>
+      <li>Ingresa tu nombre (nickname) y elige tu color preferido para el dado.</li>
+      <li>Presiona el botón <strong>“Lanzar Dado”</strong> o la barra espaciadora para iniciar la ronda. Ambos dados se lanzarán automáticamente en cada turno.</li>
+      <li>El juego tiene un total de <strong>3 rondas</strong>. La suma total de tus lanzamientos determinará tu puntaje final.</li>
+      <li>¡El jugador con el puntaje más alto al final de las 3 rondas será el ganador!</li>
+    </ol>
   </section>
 
-  <!-- Esta seccion tiene los dados, la tabla de puntaje, el marcador y ya el juego en si con todo lo que -->
-  <!-- involucra al juego -->
-  <section id="juego" style="display:none;">
-    <!-- Titulo de esta seccion que se despliega -->
-    <h1>Duelo de Dados 3D</h1>
-    
-    <!-- Aqui se muestra la ronda actual, los puntos y el turno de los jugadores  -->
-    <div id="panel-info">
-      <!-- Se muestra el número de ronda -->
-      <p>Ronda: <span id="rondaDisplay">1</span></p>
-      <!-- Mostramos que jugador debe lanzar ese momento -->
-      <p>Turno: <span id="turnoDisplay">Jugador 1</span></p>
-      <!-- Aqui colocamos esto para mostrar el puntaje que obtuvo en caso de que sea el mismo jugador el que esta -->
-      <!-- jugando de nuevo ese momento -->
-      <div id="mejoresPuntuaciones"></div>
-    </div>
-    
-    <!-- Mostramos a los dos jugadores con sus dados y sus puntajes actuales  -->
-    <div id="jugadores">
-      <!-- SParte del primer jugador -->
-      <div class="jugador" id="jugador1">
-        <!-- Mostramos el nombre ingresado del primer jugador que se actualizo solo-->
-        <h2 id="nombre1"></h2>
-        <!-- Realiza el efecto 3D del dado -->
-        <div class="dice-container">
-          <!-- El dado en 3D con sus 6 caras cada "cara" represando una cara del dado -->
-          <div class="dice" id="dice1">
-            <div class="face one">1</div>
-            <div class="face two">2</div>
-            <div class="face three">3</div>
-            <div class="face four">4</div>
-            <div class="face five">5</div>
-            <div class="face six">6</div>
-          </div>
-        </div>
-        <!-- Mostramos el puntaje sumado de cada lanzamiento del primer jugador -->
-        <p>Puntaje: <span id="puntaje1">0</span></p>
-        <!-- Es el historial del primer jugador y sus lanzamientos -->
-        <div class="historial" id="historial1">Historial: </div>
-      </div>
-      
-      <!-- Parte del segundo jugador igual que la del primer jugador -->
-      <div class="jugador" id="jugador2">
-        <!-- Se muestra el nombre del segundo jugador -->
-        <h2 id="nombre2"></h2>
-        <!-- Dado en 3D del segundo jugador -->
-        <div class="dice-container">
-          <div class="dice" id="dice2">
-            <div class="face one">1</div>
-            <div class="face two">2</div>
-            <div class="face three">3</div>
-            <div class="face four">4</div>
-            <div class="face five">5</div>
-            <div class="face six">6</div>
-          </div>
-        </div>
-        <!-- Mostramos el puntaje acumulado del segundo jugador -->
-        <p>Puntaje: <span id="puntaje2">0</span></p>
-        <!-- Historial del segundo jugador y su lanzamiento y puntos -->
-        <div class="historial" id="historial2">Historial: </div>
-      </div>
-    </div>
-    
-    <!-- Presnetamos los botones para lanzar los dados y para reiniciar -->
-    <div id="controles">
-      <!-- Aqui esta el boton para lanzar los dados e iniciar el juego  -->
-      <button id="btn-ronda">Lanzar Dado</button>
-      <!-- Aqui aparece un boton para reiniciar la partida que sale cuando se acaba los lanzamientos -->
-      <button id="btn-reiniciar" style="display:none;">Reiniciar Partida</button>
-    </div>
-    
-    <!-- Tabla para mostrar los resultados de cada ronda -->
-    <table id="tablaResultados">
-      <thead>
-        <tr>
-          <th>Ronda</th>
-          <!-- Colocamos th para que se actualicen con los nombres d elos jugadores en la tabla -->
-          <th id="columnaJugador1"></th>
-          <th id="columnaJugador2"></th>
-          <th>Ganador</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Las filas hicimos que se agreguen de forma dinamica hasta acabar las 3 rondas -->
-      </tbody>
-    </table>
-    
-    <!-- Mostramos un mensajes final de quien gano o se empato en el juego -->
-    <h2 id="mensajeFinal"></h2>
-  </section>
-
-  <!-- Elemento de audio para reproducir un sonido al lanzar el dado. -->
-  <audio id="audioDice" src="dice-sound.mp3"></audio>
-
-  <!-- Vinculamos el script de javascript con las interacciones -->
-  <script src="script.js"></script>
+  
 </body>
 </html>
