@@ -1,240 +1,252 @@
-document.addEventListener("DOMContentLoaded", () => {
-// Variables para la configuración del juego (nombres y colores)
+// Solano - Rivera
+// Aqui creamos las variables que vamos a utilizar en el script
 let nombreJugador1 = "";
 let nombreJugador2 = "";
 let colorDado1 = "#ffffff";
 let colorDado2 = "#ffffff";
 
-// Variables para el estado del juego (puntajes, ronda, turnos)
 let puntaje1 = 0;
 let puntaje2 = 0;
 let ronda = 1;
 const rondasTotales = 3;
-let turnoActual = 1;  // 1 representa al Jugador 1, 2 al Jugador 2
+let turnoActual = 1;
 
-// Arreglos para guardar el historial de lanzamientos de cada jugador
 let historialJugador1 = [];
 let historialJugador2 = [];
 
-// Referencias a elementos de la sección de configuración
-const btnIniciar = document.getElementById("btn-iniciar");
+// ELEMENTOS DEL DOM – Capturamos elementos HTML para poder modificarlos desde JS
 const inputNombre1 = document.getElementById("nombreJugador1");
 const inputNombre2 = document.getElementById("nombreJugador2");
 const inputColor1 = document.getElementById("colorDado1");
 const inputColor2 = document.getElementById("colorDado2");
 
-// Referencias a elementos de la sección del juego
-const configuracionSeccion = document.getElementById("configuracion");
-const juegoSeccion = document.getElementById("juego");
 const nombre1Mostrar = document.getElementById("nombre1");
 const nombre2Mostrar = document.getElementById("nombre2");
 const parteJugador1 = document.getElementById("parteJugador1");
 const parteJugador2 = document.getElementById("parteJugador2");
+
 const puntaje1Span = document.getElementById("puntaje1");
 const puntaje2Span = document.getElementById("puntaje2");
-const btnRonda = document.getElementById("btn-ronda");
-const btnReiniciar = document.getElementById("btn-reiniciar");
-const tablaResultadosBody = document.querySelector("#tablaResultados tbody");
-const mensajeFinal = document.getElementById("mensajeFinal");
 
-// Referencias al panel de información (ronda, turno y mejores puntuaciones)
 const rondaMostrar = document.getElementById("rondaMostrar");
 const turnoMostrar = document.getElementById("turnoMostrar");
-const mejoresPuntuaciones = document.getElementById("mejoresPuntuaciones");
+const mensajeFinal = document.getElementById("mensajeFinal");
+const ganadorPartidaTexto = document.getElementById("ganadorPartida");
 
-// Referencias a los dados 3D de cada jugador (los elementos con id "dado1" y "dado2")
-const dado1 = document.getElementById("dado1");
-const dado2 = document.getElementById("dado2");
-
-// Referencias a los elementos donde se mostrará el historial de lanzamientos
 const historial1Div = document.getElementById("historial1");
 const historial2Div = document.getElementById("historial2");
 
-// Elemento de audio para reproducir sonido al lanzar el dado
+const dado1 = document.getElementById("dado1");
+const dado2 = document.getElementById("dado2");
 const audioDado = document.getElementById("audioDado");
 
-// Objeto que asigna a cada número la rotación necesaria para mostrar la cara correcta en el dado
+const tablaResultadosBody = document.querySelector("#tablaResultados tbody");
+const tablaHistorialBody = document.querySelector("#tablaHistorial tbody");
+
+const btnIniciar = document.getElementById("btn-iniciar");
+const btnRonda = document.getElementById("btn-ronda");
+const btnReiniciar = document.getElementById("btn-reiniciar");
+const btnHistorial = document.getElementById("btn-historial");
+
+const configuracionSeccion = document.getElementById("configuracion");
+const juegoSeccion = document.getElementById("juego");
+const historialPartidasSection = document.getElementById("historialPartidas");
+
+// OBJETO PARA DEFINIR LA ROTACIÓN DE CADA CARA DEL DADO EN 3D
 const rotacionDado = {
-  1: { x: 0,   y: 0 },
-  2: { x: 0,   y: -90 },
-  3: { x: 90,  y: 0 },
-  4: { x: -90, y: 0 },
-  5: { x: 0,   y: 90 },
-  6: { x: 0,   y: 180 }
+  1: { x: 0, y: 0 },
+  2: { x: 0, y: -90 },
+  3: { x: -90, y: 0 },
+  4: { x: 0, y: 90 },
+  5: { x: 90, y: 0 },
+  6: { x: 0, y: 180 },
 };
 
-/* Función que aplica el color seleccionado a todas las caras de un dado específico.
-   Recibe el id del dado (por ejemplo, "dado1" o "dado2") y el color a aplicar.
-   Se usa la clase ".cara" (utilizada en el HTML versión 2). */
+// Convierte número (1-6) a su equivalente en texto
+function numeroTexto(num) {
+  return ["", "uno", "dos", "tres", "cuatro", "cinco", "seis"][num];
+}
+
+// Cambia el color de fondo de todas las caras del dado
 function aplicarColorDado(dadoId, color) {
-  document.querySelectorAll(`#${dadoId} .cara`).forEach(cara => {
-    cara.style.backgroundColor = color;
+  document.querySelectorAll(`#${dadoId} .cara`).forEach(c => {
+    c.style.backgroundColor = color;
   });
 }
 
-/* Función que simula el lanzamiento de un dado 3D.
-   Reproduce sonido, aplica transformaciones para animar y retorna el número obtenido mediante una Promesa. */
-function rollDice(diceElement) {
-  return new Promise(resolve => {
-    // Genera un número aleatorio entre 1 y 6
-    const resultado = Math.floor(Math.random() * 6) + 1;
-    // Obtiene la rotación final correspondiente al resultado
-    const targetRotation = rotacionDado[resultado];
-    // Genera giros completos aleatorios para un efecto visual extra
-    const randomX = (Math.floor(Math.random() * 4) + 1) * 360;
-    const randomY = (Math.floor(Math.random() * 4) + 1) * 360;
-    // Combina la rotación aleatoria con la rotación objetivo para formar la transformación final
-    const finalRotation = `rotateX(${randomX + targetRotation.x}deg) rotateY(${randomY + targetRotation.y}deg)`;
-    // Reproduce el efecto de sonido
-    audioDado.currentTime = 0;
-    audioDado.play();
-    // Aplica la transformación al dado (con animación gracias a la transición en CSS)
-    diceElement.style.transform = finalRotation;
-    // Agrega la clase que aplica el efecto de sacudida
-    diceElement.classList.add("sacudir");
-    // Espera 1 segundo para que termine la animación, luego remueve el efecto y resuelve la promesa con el resultado
-    setTimeout(() => {
-      diceElement.classList.remove("sacudir");
-      resolve(resultado);
-    }, 1000);
-  });
-}
-
-/* Función para actualizar el panel de información con la ronda actual, el turno y las mejores puntuaciones almacenadas */
+// Muestra la ronda actual y el nombre del jugador que tiene el turno
 function actualizarPanelInfo() {
   rondaMostrar.textContent = ronda;
-  turnoMostrar.textContent = turnoActual === 1 ? nombreJugador1 : nombreJugador2;
-  const record1 = localStorage.getItem("recordJugador1") || 0;
-  const record2 = localStorage.getItem("recordJugador2") || 0;
-  mejoresPuntuaciones.innerHTML = `
-    <p>Mejor puntuación de ${nombreJugador1}: ${record1}</p>
-    <p>Mejor puntuación de ${nombreJugador2}: ${record2}</p>
-  `;
+  turnoMostrar.textContent = turnoActual === 1 ? nombreJugador1 : nombreJugador2; 
 }
 
-/* Función para actualizar el historial visual de lanzamientos */
+// Actualiza el historial de resultados lanzados en la interfaz
 function actualizarHistorial() {
   historial1Div.textContent = "Historial: " + historialJugador1.join(", ");
   historial2Div.textContent = "Historial: " + historialJugador2.join(", ");
 }
 
-/* Función para reiniciar el juego y restablecer variables e interfaz */
+// Función que lanza el dado con animación 3D y sonido
+function lanzarDado(dado) {
+  return new Promise(resolve => {
+    const num = Math.floor(Math.random() * 6) + 1; // número aleatorio entre 1 y 6
+    const { x, y } = rotacionDado[num];
+    const extraX = Math.floor(Math.random() * 4) * 360; // para que el giro sea más dinámico
+    const extraY = Math.floor(Math.random() * 4) * 360;
+    const rotacion = `rotateX(${x + extraX}deg) rotateY(${y + extraY}deg)`;
+
+    dado.querySelectorAll(".cara").forEach(c => c.classList.remove("cara-activa"));
+    dado.style.transform = rotacion;
+    const caraActiva = dado.querySelector(`.cara.${numeroTexto(num)}`);
+    if (caraActiva) caraActiva.classList.add("cara-activa");
+
+    audioDado.currentTime = 0;
+    audioDado.play();
+
+    setTimeout(() => resolve(num), 1000); // después de 1 segundo, devuelve el número obtenido
+  });
+}
+
+// Guarda los datos de la partida en el localStorage
+function guardarPartida(j1, p1, j2, p2, ganador) {
+  const historial = JSON.parse(localStorage.getItem("historialPartidas") || "[]");
+  historial.unshift({
+    fecha: new Date().toLocaleString(),
+    jugador1: j1,
+    puntaje1: p1,
+    jugador2: j2,
+    puntaje2: p2,
+    ganador
+  });
+  localStorage.setItem("historialPartidas", JSON.stringify(historial));
+}
+
+// Muestra u oculta el historial de partidas guardadas
+function mostrarHistorial() {
+  const historial = JSON.parse(localStorage.getItem("historialPartidas") || "[]");
+  tablaHistorialBody.innerHTML = "";
+  historial.forEach(p => {
+    const fila = `<tr>
+                    <td>${p.fecha}</td>
+                    <td>${p.jugador1} (${p.puntaje1})</td>
+                    <td>${p.jugador2} (${p.puntaje2})</td>
+                    <td>${p.ganador}</td>
+                  </tr>`;
+    tablaHistorialBody.innerHTML += fila;
+  });
+  historialPartidasSection.style.display = 
+    historialPartidasSection.style.display === "none" ? "block" : "none";
+}
+
+// Reinicia todas las variables y limpia la pantalla
 function reiniciarJuego() {
-  puntaje1 = 0;
-  puntaje2 = 0;
+  puntaje1 = puntaje2 = 0;
   ronda = 1;
   turnoActual = 1;
   historialJugador1 = [];
   historialJugador2 = [];
-  puntaje1Span.textContent = puntaje1;
-  puntaje2Span.textContent = puntaje2;
-  actualizarPanelInfo();
+
+  puntaje1Span.textContent = "0";
+  puntaje2Span.textContent = "0";
   mensajeFinal.textContent = "";
+  ganadorPartidaTexto.style.display = "none";
   tablaResultadosBody.innerHTML = "";
-  actualizarHistorial();
   btnRonda.disabled = false;
   btnReiniciar.style.display = "none";
+  actualizarPanelInfo();
+  actualizarHistorial();
 }
 
-/* Evento para iniciar el juego cuando el usuario presiona el botón "Iniciar Juego" */
+// EVENTOS
+
+// Botón Iniciar Juego
 btnIniciar.addEventListener("click", () => {
+  // Si no escriben nombre, se usa valor por defecto
   nombreJugador1 = inputNombre1.value || "Jugador 1";
   nombreJugador2 = inputNombre2.value || "Jugador 2";
-  // Se obtienen los colores de cada dado
   colorDado1 = inputColor1.value;
   colorDado2 = inputColor2.value;
-  
-  // Actualiza los elementos que muestran los nombres en la sección del juego
+
+  // Mostrar nombres en pantalla
   nombre1Mostrar.textContent = nombreJugador1;
   nombre2Mostrar.textContent = nombreJugador2;
   parteJugador1.textContent = nombreJugador1;
   parteJugador2.textContent = nombreJugador2;
-  
-  // Aplica el color a las caras de cada dado individualmente
+
+  // Aplicar colores seleccionados
   aplicarColorDado("dado1", colorDado1);
   aplicarColorDado("dado2", colorDado2);
-  
-  actualizarPanelInfo();
+
+  // Ocultar configuración, mostrar juego
   configuracionSeccion.style.display = "none";
   juegoSeccion.style.display = "block";
+  actualizarPanelInfo();
 });
 
-/* Evento para comenzar una ronda al pulsar el botón "Lanzar Dado" */
+// Botón Lanzar Dado (una ronda)
 btnRonda.addEventListener("click", async () => {
   if (ronda > rondasTotales) return;
-  
-  // Lanza ambos dados simultáneamente y espera los resultados usando Promise.all
-  const [resultado1, resultado2] = await Promise.all([
-    rollDice(dado1),
-    rollDice(dado2)
-  ]);
-  
-  puntaje1 += resultado1;
-  puntaje2 += resultado2;
+
+  const res1 = await lanzarDado(dado1);
+  const res2 = await lanzarDado(dado2);
+
+  puntaje1 += res1;
+  puntaje2 += res2;
+  historialJugador1.push(res1);
+  historialJugador2.push(res2);
+  actualizarHistorial();
+
   puntaje1Span.textContent = puntaje1;
   puntaje2Span.textContent = puntaje2;
+
+  const ganadorRonda = 
+    res1 > res2 ? nombreJugador1 : 
+    res2 > res1 ? nombreJugador2 : 
+    "Empate";
   
-  historialJugador1.push(resultado1);
-  historialJugador2.push(resultado2);
-  actualizarHistorial();
-  
-  let ganadorRonda = "";
-  if (resultado1 > resultado2) {
-    ganadorRonda = nombreJugador1;
-  } else if (resultado2 > resultado1) {
-    ganadorRonda = nombreJugador2;
-  } else {
-    ganadorRonda = "Empate";
-  }
-  
-  const fila = document.createElement("tr");
-  fila.innerHTML = `
-    <td>${ronda}</td>
-    <td>${resultado1}</td>
-    <td>${resultado2}</td>
-    <td>${ganadorRonda}</td>
-  `;
-  tablaResultadosBody.appendChild(fila);
-  
-  turnoActual = turnoActual === 1 ? 2 : 1;
-  actualizarPanelInfo();
-  
+  tablaResultadosBody.innerHTML += 
+    `<tr>
+       <td>${ronda}</td>
+       <td>${res1}</td>
+       <td>${res2}</td>
+       <td>${ganadorRonda}</td>
+     </tr>`;
+
   if (ronda === rondasTotales) {
-    let mensaje = "";
-    if (puntaje1 > puntaje2) {
-      mensaje = `${nombreJugador1} gana el juego!`;
-      const record1 = parseInt(localStorage.getItem("recordJugador1") || "0");
-      if (puntaje1 > record1) {
-        localStorage.setItem("recordJugador1", puntaje1);
-      }
-    } else if (puntaje2 > puntaje1) {
-      mensaje = `${nombreJugador2} gana el juego!`;
-      const record2 = parseInt(localStorage.getItem("recordJugador2") || "0");
-      if (puntaje2 > record2) {
-        localStorage.setItem("recordJugador2", puntaje2);
-      }
-    } else {
-      mensaje = "El juego termina en empate!";
-    }
-    mensajeFinal.textContent = mensaje;
-    actualizarPanelInfo();
+    let final = "Empate";
+    if (puntaje1 > puntaje2) final = nombreJugador1;
+    else if (puntaje2 > puntaje1) final = nombreJugador2;
+
+    mensajeFinal.textContent = final === "Empate" ? "¡Empate!" : `${final} gana la partida!`;
+    ganadorPartidaTexto.style.display = "block";
+    ganadorPartidaTexto.textContent = `¡Ganador: ${final}!`;
+
+    guardarPartida(nombreJugador1, puntaje1, nombreJugador2, puntaje2, final);
+
     btnRonda.disabled = true;
     btnReiniciar.style.display = "inline-block";
+  } else {
+    // Solo incrementa la ronda si aún no ha llegado a la última
+    ronda++;
+    turnoActual = turnoActual === 1 ? 2 : 1;
+    actualizarPanelInfo();
   }
-  
-  ronda++;
 });
 
-/* Evento para reiniciar el juego al pulsar el botón "Reiniciar Partida" */
-btnReiniciar.addEventListener("click", () => {
-  reiniciarJuego();
-});
+// Botón Reiniciar Partida
+btnReiniciar.addEventListener("click", reiniciarJuego);
 
-/* Permite lanzar el dado usando la tecla "espacio".
-   Si se presiona la barra espaciadora, simula un clic en el botón "Lanzar Dado". */
-document.addEventListener("keydown", (e) => {
-  if (e.code === "Space" && !btnRonda.disabled && juegoSeccion.style.display === "block") {
+// Botón Ver Historial
+btnHistorial.addEventListener("click", mostrarHistorial);
+
+// Tecla Espacio para lanzar dado (en lugar de dar clic)
+document.addEventListener("keydown", e => {
+  if (
+    e.code === "Space" && 
+    !e.repeat && 
+    !btnRonda.disabled && 
+    juegoSeccion.style.display === "block"
+  ) {
     btnRonda.click();
   }
-});
 });
