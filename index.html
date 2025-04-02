@@ -1,69 +1,82 @@
 <!DOCTYPE html>
-<html lang="es">
-  <!-- Colocamos el documento en español y ponemos que es html5 -->
+<html  lang="es">
 <head>
-  <!-- Aqui inicia la cabeza del documento -->
-  <meta charset="UTF-8">
-  <!-- Es para que se muestre correctamente todos los caracteres y simbolos -->
+  <meta charset ="UTF-8">
+  <!-- Ajustamos para que funcione para celulares -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Esta linea es muy importante permite que la pagina sea responsiva -->
-  <title>Duelo de Dados 3D</title>
-  <!-- Titulo que s emuestra en el navegador -->
-  <link rel="stylesheet" href="style.css">
-  <!-- Linea para vincular el documento de los estilos-->
+  <title> Duelo de Dados</title>
+  
+  <!-- Elegimos un estilo de fuente al estilo de Street Fighter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  
+  <!-- Enlazamos la hoja de estilos CSS que tenemos -->
+  <link rel ="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- Aqui colocamos una seccion para que podamos ingresar nombres de los jugadores y el color del dado -->
-  <section id="configuracion">
-    <!-- titulo o encabezo de esta seccion -->
+  <!-- 
+    SECCIÓN DE CONFIGURACIÓN DEL JUEGO:
+    Aquí creamos para que la persona ingresa nombres, elija color de los dados 
+    y puede leer las reglas básicas.
+  -->
+  <section id ="configuracion">
     <h1>Configurar Juego</h1>
-    <!-- Input con un textfield para ingresar el nombrel del primer jugador -->
+    
+    <!-- Nombre del jugador 1 y color de su dado -->
     <input type="text" id="nombreJugador1" placeholder="Nombre Jugador 1">
-    <!-- Input con un textfield para ingresar el nombrel del segundo jugador -->
+    <input type="color" id="colorDado1" value="#ffffff">
+    
+    <br><br>
+    
+    <!-- Nombre del jugador 2 y color de su dado -->
     <input type="text" id="nombreJugador2" placeholder="Nombre Jugador 2">
-    <!-- Label para elegir el color del dado -->
-    <label for="colorDado">Color del Dado:</label>
-    <!-- Input del color para que el jugador seleccione el color del dado -->
-    <input type="color" id="colorDado" value="#ffffff">
+    <input type="color" id="colorDado2" value="#ffffff">
+    
+    <br><br>
+    
     <!-- Botón para iniciar el juego -->
     <button id="btn-iniciar">Iniciar Juego</button>
+
+    <!-- Reglas del juego en lista ordenada -->
     <h2>Reglas del Juego</h2>
     <ol>
-      <li>Ingresa tu nombre (nickname) y elige tu color preferido para el dado.</li>
-      <li>Presiona el botón <strong>“Lanzar Dado”</strong> o la barra espaciadora para iniciar la ronda. Ambos dados se lanzarán automáticamente en cada turno.</li>
-      <li>El juego tiene un total de <strong>3 rondas</strong>. La suma total de tus lanzamientos determinará tu puntaje final.</li>
-      <li>¡El jugador con el puntaje más alto al final de las 3 rondas será el ganador!</li>
+      <li>Ingresa tu nombre y elige el color del dado.</li>
+      <li>Presiona <strong>“Lanzar Dado”</strong> o la barra espaciadora para cada ronda.</li>
+      <li>Son <strong>3 rondas</strong> se suman puntajes para el total.</li>
+      <li>Gana quien tenga mayor puntaje al final.</li>
     </ol>
   </section>
 
-  <!-- Esta seccion tiene los dados, la tabla de puntaje, el marcador y ya el juego en si con todo lo que -->
-  <!-- involucra al juego -->
+  <!-- SECCIÓN PRINCIPAL DEL JUEGO 
+    Se despliega despues de configurar el juego -->
   <section id="juego" style="display:none;">
-    <!-- Titulo de esta seccion que se despliega -->
-    <h1>Duelo de Dados 3D</h1>
+    <!-- Ocupamos el estilo de letra de street fighter -->
+    <h1 id="tituloJuego">Duelo de Dados</h1>
     
-    <!-- Aqui se muestra la ronda actual, los puntos y el turno de los jugadores  -->
+    <!-- Aqui colocamos la informacion del juego como: Ronda actual, Turno actual y posible Ganador -->
     <div id="panel-informacion">
-      <!-- Se muestra el número de ronda -->
-      <p>Ronda: <span id="rondaMostrar">1</span></p>
-      <!-- Mostramos que jugador debe lanzar ese momento -->
-      <p>Turno: <span id="turnoMostrar">Jugador 1</span></p>
-      <!-- Aqui colocamos esto para mostrar el puntaje que obtuvo en caso de que sea el mismo jugador el que esta -->
-      <!-- jugando de nuevo ese momento -->
-      <div id="mejoresPuntuaciones"></div>
+      <div class="info-ronda">
+        <span class="label-ronda">Ronda</span>
+        <span id="rondaMostrar">1</span>
+      </div>
+      <div class="info-turno">
+        <span class="label-turno">Turno</span>
+        <span id="turnoMostrar">Jugador 1</span>
+      </div>
+      <!-- Aparece un mensaje del jugador ganador al final) -->
+      <p id="ganadorPartida" style="display:none;"></p>
     </div>
     
-    <!-- Mostramos a los dos jugadores con sus dados y sus puntajes actuales  -->
+    <!-- Colocamos los datos de ambos jugadores y de los dados para el juego -->
     <div id="jugadores">
-      <!-- SParte del primer jugador -->
+      <!-- Jugador 1 -->
       <div class="jugador" id="jugador1">
-        <!-- Mostramos el nombre ingresado del primer jugador que se actualizo solo-->
-        <h2 id="nombre1"></h2>
-        <!-- Realiza el efecto 3D del dado -->
+        <h2 id ="nombre1"></h2>
+        
+        <!-- Creamos esta clase para el efecto de 3D de nuestro dado -->
         <div class="dado-giro">
-          <!-- El dado en 3D con sus 6 caras cada "cara" represando una cara del dado -->
-          <div class="dado" id="dado1">
+          <div class ="dado" id="dado1">
+            <!-- Caras del dado -->
             <div class="cara uno">1</div>
             <div class="cara dos">2</div>
             <div class="cara tres">3</div>
@@ -72,19 +85,22 @@
             <div class="cara seis">6</div>
           </div>
         </div>
-        <!-- Mostramos el puntaje sumado de cada lanzamiento del primer jugador -->
+
+        <!-- Mostramos el puntaje acumulado por lanzamiento -->
         <p>Puntaje: <span id="puntaje1">0</span></p>
-        <!-- Es el historial del primer jugador y sus lanzamientos -->
+        
+        <!-- Mostramos el historial de los numeros que han salido -->
         <div class="historial" id="historial1">Historial: </div>
       </div>
-      
-      <!-- Parte del segundo jugador igual que la del primer jugador -->
-      <div class="jugador" id="jugador2">
-        <!-- Se muestra el nombre del segundo jugador -->
+
+      <!-- Jugador 2 -->
+      <div class ="jugador" id="jugador2">
         <h2 id="nombre2"></h2>
-        <!-- Dado en 3D del segundo jugador -->
+        
+        <!-- Lo mismo que el primer dado pero para este de aca -->
         <div class="dado-giro">
           <div class="dado" id="dado2">
+            <!-- Caras del dado -->
             <div class="cara uno">1</div>
             <div class="cara dos">2</div>
             <div class="cara tres">3</div>
@@ -93,45 +109,69 @@
             <div class="cara seis">6</div>
           </div>
         </div>
-        <!-- Mostramos el puntaje acumulado del segundo jugador -->
+
+        <!-- Mostramos el puntaje acumulado por lanzamiento  -->
         <p>Puntaje: <span id="puntaje2">0</span></p>
-        <!-- Historial del segundo jugador y su lanzamiento y puntos -->
+        
+        <!-- Mostramos el historial de los numeros que han salido -->
         <div class="historial" id="historial2">Historial: </div>
       </div>
     </div>
     
-    <!-- Pressentamos los botones para lanzar los dados y para reiniciar -->
-    <div id="controles">
-      <!-- Aqui esta el boton para lanzar los dados de nuevo en cada ronda  -->
-      <button id="btn-ronda">Lanzar Dado</button>
-      <!-- Aqui aparece un boton para reiniciar la partida que sale cuando se acaba los lanzamientos -->
+    <!-- Sección de controles: lanzar dados, reiniciar, ver historial -->
+    <div id ="controles">
+      <button id ="btn-ronda">Lanzar Dado</button>
       <button id="btn-reiniciar" style="display:none;">Reiniciar Partida</button>
+      <button id="btn-historial">Ver Historial</button>
     </div>
-    
-    <!-- Tabla para mostrar los resultados de cada ronda -->
-    <table id="tablaResultados">
+
+    <!-- Es la parte de abajo de los dados, es la tabla para mostrar las rondas 
+    los nombres d elos jugadores y el ganador de cada ronda y el ganador final -->
+    <div class="tabla-resultados-contenedor">
+      <table id="tablaResultados">
+        <thead>
+          <tr>
+            <th>Ronda</th>
+            <th id="parteJugador1"></th>
+            <th id="parteJugador2"></th>
+            <th>Ganador</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Es para el mensaje final de la persona que gano o empataron -->
+    <h2 id="mensajeFinal"></h2>
+  </section>
+
+  <!-- 
+    SECCIÓN DE HISTORIAL DE PARTIDAS:
+    Aqui es la tabla que surge al darle le boton de historial
+  -->
+  <section id="historialPartidas" style="display:none;">
+    <h2>Historial de Partidas</h2>
+    <table id="tablaHistorial">
       <thead>
         <tr>
-          <th>Ronda</th>
-          <!-- Colocamos th para que se actualicen con los nombres d elos jugadores en la tabla -->
-          <th id="parteJugador1"></th>
-          <th id="parteJugador2"></th>
+          <th>Fecha/Hora</th>
+          <th>Jugador 1</th>
+          <th>Jugador 2</th>
           <th>Ganador</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Las filas hicimos que se agreguen de forma dinamica hasta acabar las 3 rondas -->
       </tbody>
     </table>
-    
-    <!-- Mostramos un mensajes final de quien gano o se empato en el juego -->
-    <h2 id="mensajeFinal"></h2>
   </section>
 
-  <!-- Elemento de audio para reproducir un sonido al lanzar el dado. -->
+  <!-- Colocamos el sonido del dado para el lanzaminento -->
   <audio id="audioDado" src="dado-audio.mp3"></audio>
 
-  <!-- Vinculamos el script de javascript con las interacciones -->
+  <!-- 
+    Archivo de javascript
+  -->
   <script src="script.js"></script>
 </body>
 </html>
