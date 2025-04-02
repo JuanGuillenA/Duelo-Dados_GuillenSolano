@@ -1,205 +1,242 @@
-  /* -------Solano - Guillen---------------- */
+/* =======Solano - Guillen ======= */
+/* Estilo general del cuerpo de la página */
 body {
-    font-family: Arial, sans-serif; /* Fuente del texto de la página */
-    background: #f0f0f0;            /* Color de fondo de la página */
-    text-align: center;             /* Centra el contenido */
-    margin: 0;                      /* Quita márgenes por defecto */
-    padding: 20px;                  /* Espaciado interno */
-  }
-  
-  /* ----------------------- */
-  /* Sección de Configuración */
-  /* ----------------------- */
-  #configuracion {
-    background-color: #ffffff;
-    padding: 30px;
-    margin: 0 auto 20px;
-    max-width: 350px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  #configuracion h1 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
-    color: #1e88e5;
-  }
-  
-  /* Reglas del Juego */
-  #configuracion h2 {
-    font-size: 1.5em;
-    color: #1e88e5;
-    margin-top: 30px;
-    margin-bottom: 15px;
-  }
-  
-  #configuracion ol {
-    list-style-position: inside;
-    padding-left: 0;
-    text-align: left;
-    margin: 0 auto;
-    max-width: 300px;
-  }
-  
-  #configuracion ol li {
-    margin-bottom: 10px;
-    font-size: 1em;
-    line-height: 1.6;
-    color: #444;
-    background-color: #f9f9f9;
-    padding: 8px 12px;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  }
-  
-  /* Opcional: Estilos para formularios de jugador, si se utilizan */
-  .form-jugador {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-  }
-  
-  .form-jugador input[type="text"] {
-    flex: 1;
-    padding: 8px 10px;
-    font-size: 1em;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  
-  .form-jugador input[type="color"] {
-    width: 45px;
-    height: 45px;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    background: none;
-  }
-  
-  /* Botón Iniciar */
-  #btn-iniciar {
-    padding: 10px 18px;
-    font-size: 1em;
-    border: none;
-    background-color: #1e88e5;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  #btn-iniciar:hover {
-    background-color: #1565c0;
-  }
-  
-  /* ----------------------- */
-  /* Sección del Juego       */
-  /* ----------------------- */
-  #juego {
-    margin-top: 20px;
-  }
-  
-  /* Panel de Información (ronda, turno, mejores puntuaciones) */
-  #panel-informacion {
-    background: #ddd;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-  }
-  
-  /* ----------------------- */
-  /* Jugadores y Dados       */
-  /* ----------------------- */
-  .jugador {
-    display: inline-block;
-    margin: 20px;
-    padding: 10px;
-    border: 2px solid #333;
-    border-radius: 10px;
-    width: 200px;
-  }
-  
-  #jugador1 {
-    background: #e3f2fd;
-  }
-  #jugador2 {
-    background: #ffebee;
-  }
-  
-  /* Contenedor para el dado 3D */
-  .dado-giro {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto;
-    perspective: 600px;
-  }
-  
-  /* Estilo base para el dado 3D */
-  .dado {
-    width: 100px;
-    height: 100px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 1s;
-  }
-  
-  /* Animación opcional: Efecto de Sacudida para el dado */
-  @keyframes sacudir {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
-  }
-  
-  .sacudir {
-    animation: sacudir 0.5s;
-  }
-  
-  /* ----------------------- */
-  /* Caras del Dado          */
-  /* ----------------------- */
-  /* Usamos la nomenclatura de la versión 2: .cara */
-  .cara {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    font-size: 2em;
-    font-weight: bold;
-    text-align: center;
-    border: 2px solid #000;
-    box-sizing: border-box;
-  }
-  
-  /* Posicionamiento de cada cara en el espacio 3D */
-  .cara.uno    { transform: rotateY(0deg) translateZ(50px); }
-  .cara.dos    { transform: rotateY(90deg) translateZ(50px); }
-  .cara.tres   { transform: rotateX(90deg) translateZ(50px); }
-  .cara.cuatro { transform: rotateY(-90deg) translateZ(50px); }
-  .cara.cinco  { transform: rotateX(-90deg) translateZ(50px); }
-  .cara.seis   { transform: rotateY(180deg) translateZ(50px); }
-  
-  /* ----------------------- */
-  /* Tabla de Resultados     */
-  /* ----------------------- */
-  table {
-    margin: 20px auto;
-    border-collapse: collapse;
-  }
-  
-  table, th, td {
-    border: 1px solid #333;
-    padding: 8px;
-  }
-  
-  /* ----------------------- */
-  /* Historial de Lanzamientos */
-  /* ----------------------- */
-  .historial {
-    margin-top: 10px;
-    font-size: 0.9em;
-    color: #555;
-  }
+  font-family: Arial, sans-serif;       
+  text-align: center;                   
+  background: #f0f4f8;                 
+  padding: 20px;
+  margin: 0;
+}
+
+/* Espaciado entre secciones */
+section {
+  margin-bottom: 30px;
+}
+
+/* Estilo del panel de configuración */
+#configuracion {
+  background: white;
+  padding: 30px;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+/* Títulos dentro del panel de configuración */
+#configuracion h1 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #1e88e5;                      
+}
+
+#configuracion h2 {
+  font-size: 1.3em;
+  color: #1e88e5;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+/* Campos de texto */
+#configuracion input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px auto;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Selector de color */
+#configuracion input[type="color"] {
+  width: 50px;
+  height: 40px;
+  margin: 10px auto;
+  border: none;
+  background: #f0f0f0;
+  display: block;
+}
+
+/* Botón para iniciar el juego */
+#btn-iniciar {
+  padding: 10px 18px;
+  font-size: 1em;
+  border: none;
+  background-color: #1e88e5;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#btn-iniciar:hover {
+  background-color: #1565c0;
+}
+
+/* Lista de reglas */
+#configuracion ol {
+  list-style-position: inside;
+  padding-left: 0;
+  text-align: left;
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+#configuracion ol li {
+  margin-bottom: 10px;
+  font-size: 1em;
+  line-height: 1.6;
+  color: #444;
+  background-color: #f1f8ff;
+  padding: 8px 12px;
+  border-left: 4px solid #2196f3;
+}
+
+/* ======= SECCIONES DEL JUEGO Y HISTORIAL ======= */
+#juego, #historialPartidas {
+  background: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Contenedor de los jugadores */
+#jugadores {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* Tarjeta individual de cada jugador */
+.jugador {
+  background: #e8f5e9;
+  padding: 15px;
+  width: 180px;
+  margin-bottom: 20px;
+  border: 1px solid #c8e6c9;
+}
+
+/* Contenedor 3D del dado */
+.dado-giro {
+  width: 100px;
+  height: 100px;
+  margin: 10px auto;
+  perspective: 500px;
+}
+
+/* Cubo del dado */
+.dado {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+
+/* Caras del dado */
+.cara {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid #000;
+  background: #fffde7;
+}
+
+/* Posicionamiento 3D de cada cara del dado */
+.cara.uno    { transform: rotateY(0deg)   translateZ(50px); }
+.cara.dos    { transform: rotateY(90deg)  translateZ(50px); }
+.cara.tres   { transform: rotateX(90deg)  translateZ(50px); }
+.cara.cuatro { transform: rotateY(-90deg) translateZ(50px); }
+.cara.cinco  { transform: rotateX(-90deg) translateZ(50px); }
+.cara.seis   { transform: rotateY(180deg) translateZ(50px); }
+
+/* Efecto visual para la cara activa */
+.cara-activa {
+  border: 3px solid #4caf50;
+}
+
+/* Estilo para historial de puntajes */
+.historial {
+  font-size: 0.9em;
+  color: #333;
+  margin-top: 5px;
+}
+
+/* Panel con info de ronda y turno */
+#panel-informacion {
+  font-family: 'Press Start 2P', cursive;
+  background: #d0ebeb;
+  padding: 10px;
+  margin-top: 10px;
+  color: #0c0b11;
+  font-weight: bold;
+  line-height: 1.6;
+}
+
+/* Botones generales */
+button {
+  padding: 10px 15px;
+  margin: 10px 5px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #45a049;
+}
+
+/* Tablas de resultados e historial */
+#tablaResultados, #tablaHistorial {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#tablaResultados th, #tablaResultados td,
+#tablaHistorial th, #tablaHistorial td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  background: #f1f8e9;
+}
+
+/* Mensaje final de victoria o empate */
+#mensajeFinal {
+  font-family: 'Press Start 2P', cursive;
+  margin-top: 15px;
+  font-size: 1.2em;
+  color: #222222;
+  background: #e3f2fd;
+  padding: 10px;
+}
+
+/* Botón de reiniciar */
+#btn-reiniciar {
+  background: #f44336;
+}
+
+#btn-reiniciar:hover {
+  background: #d32f2f;
+}
+
+/* Botón para ver historial */
+#btn-historial {
+  background: #9c27b0;
+}
+
+#btn-historial:hover {
+  background: #7b1fa2;
+}
+
+/* Título del juego con fuente retro */
+#tituloJuego {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.6em;
+  color: #0f1a47;
+  display: inline-block;
+}
